@@ -1,31 +1,11 @@
-import UserProfile from "./components/userProfile/userProfile.jsx";
-
-let user = {
-  firstName: "John",
-  lastName: "Doe",
-  skills: "React, JavaScript"
-};
-
-let user2 = {
-  firstName: "Mark",
-  lastName: "Doe",
-  skills: "NodeJs, JavaScript"
-};
+import { Link } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <UserProfile
-        firstName={user.firstName}
-        lastName={user.lastName}
-        skills={user.skills}
-      />
+      <h1>Home</h1>
 
-      <UserProfile
-        firstName={user2.firstName}
-        lastName={user2.lastName}
-        skills={user2.skills}
-      />
+      <Link to="/login">Go to Login</Link>
     </>
   );
 }
