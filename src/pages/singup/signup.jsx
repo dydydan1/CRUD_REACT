@@ -8,6 +8,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import {Button} from "@/components/ui/button"
+import {Link} from "react-router-dom"
 
  function Signup (){
     return(
@@ -44,12 +46,15 @@ import { Input } from "@/components/ui/input"
                         <Input className="mb-4"
                             id="input"
                             type="password"
-                            placeholder="Password"
+                            placeholder="Password"  
             
                         />
                     </CardContent>
-                    <CardFooter>
-                        <p>Card Footer</p>
+                    <CardFooter className="flex flex-row justify-between">
+                        <p>
+                            Already have an account? {" "} <Link to="/" className="hover:text-blue-500">Login here</Link>
+                        </p>
+                        <Button>Signup</Button>
                     </CardFooter>
                 </Card>
             </div>
