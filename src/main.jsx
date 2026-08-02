@@ -20,7 +20,7 @@ let router = createBrowserRouter([
   },
   
   {
-    path: "/tasks",
+    path: "/tasks", 
     element: <Tasks />
   },
 

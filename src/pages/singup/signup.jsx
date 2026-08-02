@@ -51,12 +51,12 @@ import {Link} from "react-router-dom"
                         />
                     </CardContent>
                     <CardFooter className="flex flex-row justify-between">
-                        <p>
-                            Already have an account? {" "} <Link to="/" className="hover:text-blue-500">Login here</Link>
+                        <p className="basis-1/2">
+                            Already have an account? {" "} <Link to="/login" className="hover:text-blue-500">Login here</Link>
                         </p>
                         <Button>Signup</Button>
                     </CardFooter>
-                </Card>
+                </Card> 
             </div>
         </section>
         </>
