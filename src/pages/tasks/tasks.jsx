@@ -1,6 +1,7 @@
 import { FilterBar } from "@/components/filterBar/filterBar.jsx";
 import { TasksCounter } from "@/components/tasksCounter/tasksCounter";
-
+import {  Task } from "@/components/task/task.jsx";
+import  {TaskSidebar}  from "@/components/taskSidebar/taskSidebar.jsx";
 function Tasks() {
   return (
     <section className="flex flex-row w-full p-4 gap-8">
@@ -19,13 +20,14 @@ function Tasks() {
             <TasksCounter count={12} type="completed" />
           </div>
           <FilterBar />
+          <Task />
           </div>
         </div>
 
       </section>
 
-      <section className="flex basis-1/3 bg-red-300">
-        Create Tasks Section
+      <section className="flex basis-1/3 ">
+        <TaskSidebar />
       </section>
 
     </section>
