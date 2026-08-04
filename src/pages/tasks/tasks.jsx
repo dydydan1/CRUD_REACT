@@ -12,12 +12,12 @@ function Tasks() {
           <h1 className="text-white font-bold text-2xl mb-8 w-full">
             Tasks as on: Sunday, 2 Aug 2026
           </h1>
-          <div className="w-11/12 flex flex-col ">
 
+          <div className="w-11/12 flex flex-col ">
           <div className="flex justify-around mb-16">
             <TasksCounter count={4} type="todo" />
-            <TasksCounter count={10} type="inProgress" />
-            <TasksCounter count={12} type="completed" />
+            <TasksCounter count={8} type="inProgress" />
+            <TasksCounter count={3} type="completed" />
           </div>
           <FilterBar />
           <Task />
