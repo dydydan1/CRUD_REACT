@@ -107,7 +107,7 @@ export function CreateTaskForm() {
 
         <div className="py-2">
         <Popover>
-            <PopoverTrigger render={<Button variant={"outline"} data-empty={!date} className="w-[200px] justify-between text-left font-normal data-[empty=true]:text-muted-foreground">{date ? format(date, "PPP") : <span>Due date</span>}<ChevronDownIcon data-icon="inline-end" /></Button>} />
+            <PopoverTrigger render={<Button variant={"outline"} data-empty={!date} className="w-50 justify-between text-left font-normal data-[empty=true]:text-muted-foreground">{date ? format(date, "PPP") : <span>Due date</span>}<ChevronDownIcon data-icon="inline-end" /></Button>} />
             <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                 mode="single"
@@ -118,9 +118,11 @@ export function CreateTaskForm() {
             </PopoverContent>
         </Popover>
         </div>
+        
         <div className="py-2">
          <Textarea placeholder="Description of the task" />
         </div>
+
         <div className="py-2 flex justify-end">
          <Button>Create Task</Button>
         </div>
