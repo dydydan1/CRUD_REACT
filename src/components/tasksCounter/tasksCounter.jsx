@@ -1,4 +1,5 @@
 export function TasksCounter({ type = "todo", count = 0 }) {
+    
   const borderColor = {
     todo: "border-red-500",
     inProgress: "border-orange-500",

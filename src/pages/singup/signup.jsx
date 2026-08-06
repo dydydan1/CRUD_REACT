@@ -21,23 +21,31 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
 
 import { SignupSchema } from "@/schema/signup.schema"
+import { useSignup } from "@/hooks/useSignup.hook.js"
+
 
 function Signup() {
 
-  const form = useForm({
-    resolver: zodResolver(SignupSchema),
+  let {mutate, isPending, isError, isSuccess} = useSignup();
 
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    },
-  })
+  let form = useForm({
+  resolver: zodResolver(SignupSchema),
 
-  const onSubmit = (data) => {
-    console.log(data)
-  }
+  defaultValues: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  },
+})
+
+  let onSubmit = (data) => {
+  mutate(data, {
+    onSuccess: () => {
+      form.reset();
+    }
+  });
+}
 
   return (
     <section className="flex w-full max-w-7xl min-h-screen justify-center items-center">
@@ -168,9 +176,9 @@ function Signup() {
                 </Link>
               </p>
 
-              <Button type="submit">
-                Signup
-              </Button>
+              <Button type="submit" disabled={isPending}>
+                  {isPending ? "Creating account..." : "Signup"}
+            </Button>
 
             </CardFooter>
 

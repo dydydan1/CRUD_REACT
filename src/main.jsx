@@ -1,42 +1,48 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { Link, createBrowserRouter, RouterProvider } from 'react-router-dom'
-import './index.css'
-import App from './App.jsx'
-import Tasks from "./pages/tasks/tasks.jsx";
-import Signup from './pages/singup/signup.jsx'
-import Login from './pages/login/login.jsx'
-import Error404 from './pages/404/404.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
 
-let router = createBrowserRouter([
+import App from "./App.jsx";
+import Tasks from "./pages/tasks/tasks.jsx";
+import Signup from "./pages/singup/signup.jsx";
+import Login from "./pages/login/login.jsx";
+import Error404 from "./pages/404/404.jsx";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const queryClient = new QueryClient();
+
+const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
   },
-
   {
     path: "/login",
     element: <Login />,
   },
-  
   {
-    path: "/tasks", 
-    element: <Tasks />
+    path: "/tasks",
+    element: <Tasks />,
   },
-
   {
     path: "/signup",
-    element: <Signup />
+    element: <Signup />,
   },
-
   {
     path: "*",
-    element: <Error404 />
-  }
-
-
+    element: <Error404 />,
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  </StrictMode>
 );
