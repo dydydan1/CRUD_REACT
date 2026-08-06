@@ -21,6 +21,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+import {
+  Field,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
+
+import { CreateTaskSchema } from "@/schema/createTask.schema"
+
 const items = [
   {
     value: "low",
@@ -37,95 +48,238 @@ const items = [
 ]
 
 export function CreateTaskForm() {
-    const [date, setDate] = React.useState()
+
+  const form = useForm({
+    resolver: zodResolver(CreateTaskSchema),
+
+    defaultValues: {
+      title: "",
+      status: "",
+      priority: "",
+      dueDate: undefined,
+      description: "",
+  },
+  });
+
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
   return (
     <div>
-      <h2 className="text-2xl mb-4">Create a new Task</h2>
+      <h2 className="text-2xl mb-4">
+        Create a new Task
+      </h2>
 
-      <form>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+
+        {/* TITLE */}
         <div className="py-2">
-          <Input
-            type="text"
-            placeholder="Task title"
+
+          <Controller
+            name="title"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+
+                <FieldLabel>Task Title</FieldLabel>
+
+                <Input
+                  {...field}
+                  type="text"
+                  placeholder="Task title"
+                />
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+
+              </Field>
+            )}
           />
+
         </div>
+
 
         <div className="flex justify-between py-2">
 
-          <div>
-            <Select>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
+          {/* STATUS */}
+          <Controller
+            name="status"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
 
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Status</SelectLabel>
+                <FieldLabel>Status</FieldLabel>
 
-                  <SelectItem value="pending">
-                    Pending
-                  </SelectItem>
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
 
-                  <SelectItem value="in-progress">
-                    In Progress
-                  </SelectItem>
+                  <SelectContent>
+                    <SelectGroup>
 
-                  <SelectItem value="completed">
-                    Completed
-                  </SelectItem>
+                      <SelectItem value="pending">
+                        Pending
+                      </SelectItem>
 
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+                      <SelectItem value="in-progress">
+                        In Progress
+                      </SelectItem>
 
-          <div>
-            <Select>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Select priority" />
-              </SelectTrigger>
+                      <SelectItem value="completed">
+                        Completed
+                      </SelectItem>
 
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Priority</SelectLabel>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
 
-                  {items.map((item) => (
-                    <SelectItem
-                      key={item.value}
-                      value={item.value}
-                    >
-                      {item.label}
-                    </SelectItem>
-                  ))}
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
 
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          
+              </Field>
+            )}
+          />
+
+
+          {/* PRIORITY */}
+          <Controller
+            name="priority"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+
+                <FieldLabel>Priority</FieldLabel>
+
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-48">
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectGroup>
+
+                      {items.map((item) => (
+                        <SelectItem
+                          key={item.value}
+                          value={item.value}
+                        >
+                          {item.label}
+                        </SelectItem>
+                      ))}
+
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+
+              </Field>
+            )}
+          />
+
         </div>
 
+
+        {/* DUE DATE */}
         <div className="py-2">
-        <Popover>
-            <PopoverTrigger render={<Button variant={"outline"} data-empty={!date} className="w-50 justify-between text-left font-normal data-[empty=true]:text-muted-foreground">{date ? format(date, "PPP") : <span>Due date</span>}<ChevronDownIcon data-icon="inline-end" /></Button>} />
-            <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                defaultMonth={date}
+
+          <Controller
+            name="dueDate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+
+                <FieldLabel>Due Date</FieldLabel>
+
+                <Popover>
+
+                  <PopoverTrigger
+                    render={
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-50 justify-between"
+                      >
+                        {field.value
+                          ? format(field.value, "PPP")
+                          : "Due date"}
+
+                        <ChevronDownIcon />
+                      </Button>
+                    }
+                  />
+
+                  <PopoverContent
+                    className="w-auto p-0"
+                    align="start"
+                  >
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                    />
+                  </PopoverContent>
+
+                </Popover>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+
+              </Field>
+            )}
+          />
+
+        </div>
+
+
+        {/* DESCRIPTION */}
+        <div className="py-2">
+
+          <Controller
+            name="description"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+
+                <FieldLabel>Description</FieldLabel>
+
+                <Textarea
+                  {...field}
+                  placeholder="Description of the task"
                 />
-            </PopoverContent>
-        </Popover>
+
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+
+              </Field>
+            )}
+          />
+
         </div>
-        
-        <div className="py-2">
-         <Textarea placeholder="Description of the task" />
-        </div>
+
 
         <div className="py-2 flex justify-end">
-         <Button>Create Task</Button>
+
+          <Button type="submit">
+            Create Task
+          </Button>
+
         </div>
+
       </form>
     </div>
   )
