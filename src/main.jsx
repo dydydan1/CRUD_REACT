@@ -8,6 +8,7 @@ import Tasks from "./pages/tasks/tasks.jsx";
 import Signup from "./pages/singup/signup.jsx";
 import Login from "./pages/login/login.jsx";
 import Error404 from "./pages/404/404.jsx";
+import PrivateRoutes from "./components/privateRoutes/privateRoutes.jsx"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -23,9 +24,14 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
+
   {
-    path: "/tasks",
-    element: <Tasks />,
+    element: <PrivateRoutes />,
+    children: [{
+        path: "/tasks",
+        element: <Tasks />,
+    }],
+
   },
   {
     path: "/signup",
