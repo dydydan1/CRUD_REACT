@@ -5,54 +5,73 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 import {
   Field,
   FieldError,
   FieldLabel,
-} from "@/components/ui/field"
+} from "@/components/ui/field";
 
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
+import { Toaster, toast } from "@/components/ui/toast";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Link, useNavigate } from "react-router-dom";
 
-import { SignupSchema } from "@/schema/signup.schema"
-import { useSignup } from "@/hooks/useSignup.hook.js"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+
+import { SignupSchema } from "@/schema/signup.schema";
+import { useSignup } from "@/hooks/useSignup.hook";
+
 
 
 function Signup() {
 
-  let {mutate, isPending, isError, isSuccess} = useSignup();
+  const { mutate, isPending } = useSignup();
+  let navigate = useNavigate()
 
-  let form = useForm({
-  resolver: zodResolver(SignupSchema),
-
-  defaultValues: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  },
-})
-
-  let onSubmit = (data) => {
-  mutate(data, {
-    onSuccess: () => {
-      form.reset();
-    }
+  const form = useForm({
+    resolver: zodResolver(SignupSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
   });
-}
+
+    const onSubmit = (data) => {
+      mutate(data, {
+        onSuccess: (response) => {
+          form.reset();
+
+          toast.add({
+            title: "Signup Successful",
+            description: response.message,
+            type: "success",
+            actionProps: {
+              children: "Login",
+              onClick: () => navigate("/login"),
+            },
+          });
+        },
+
+    onError: (error) => {
+      toast.add({
+        title: "Signup Failed",
+        description: "Error signup, check your credentials",
+        type: "error",
+      });
+    },
+  });
+};
 
   return (
-    <section className="flex w-full max-w-7xl min-h-screen justify-center items-center">
-      <div className="w-4/12">
-
+    <section className="min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md">
         <Card>
-
           <CardHeader>
             <CardTitle>Signup</CardTitle>
 
@@ -61,9 +80,7 @@ function Signup() {
             </CardDescription>
           </CardHeader>
 
-
           <form onSubmit={form.handleSubmit(onSubmit)}>
-
             <CardContent className="space-y-4">
 
               {/* FIRST NAME */}
@@ -72,7 +89,6 @@ function Signup() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-
                     <FieldLabel>First Name</FieldLabel>
 
                     <Input
@@ -84,11 +100,9 @@ function Signup() {
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
-
                   </Field>
                 )}
               />
-
 
               {/* LAST NAME */}
               <Controller
@@ -96,7 +110,6 @@ function Signup() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-
                     <FieldLabel>Last Name</FieldLabel>
 
                     <Input
@@ -108,11 +121,9 @@ function Signup() {
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
-
                   </Field>
                 )}
               />
-
 
               {/* EMAIL */}
               <Controller
@@ -120,7 +131,6 @@ function Signup() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-
                     <FieldLabel>Email</FieldLabel>
 
                     <Input
@@ -132,11 +142,9 @@ function Signup() {
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
-
                   </Field>
                 )}
               />
-
 
               {/* PASSWORD */}
               <Controller
@@ -144,7 +152,6 @@ function Signup() {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-
                     <FieldLabel>Password</FieldLabel>
 
                     <Input
@@ -156,16 +163,13 @@ function Signup() {
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
-
                   </Field>
                 )}
               />
 
             </CardContent>
 
-
             <CardFooter className="flex justify-between mt-6">
-
               <p className="basis-1/2 text-sm">
                 Already have an account?{" "}
                 <Link
@@ -177,18 +181,16 @@ function Signup() {
               </p>
 
               <Button type="submit" disabled={isPending}>
-                  {isPending ? "Creating account..." : "Signup"}
-            </Button>
-
+                {isPending ? "Creating account..." : "Signup"}
+              </Button>
             </CardFooter>
-
           </form>
-
         </Card>
-
       </div>
+
+      <Toaster />
     </section>
-  )
+  );
 }
 
-export default Signup
+export default Signup;

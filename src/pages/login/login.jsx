@@ -9,7 +9,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom"
+import { Link, useNavigate} from "react-router-dom"
 
 import {
   Field,
@@ -17,13 +17,18 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 
+import { Toaster, toast } from "@/components/ui/toast";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
-
+import {useLogin} from "@/hooks/useLogin.hook.js"
+import { Children, useEffect } from "react"
 import { LoginSchema } from "@/schema/login.schema"
 
 
 function Login() {
+
+    let {mutate, isError, isSuccess} = useLogin();
+    let navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(LoginSchema),
@@ -32,11 +37,36 @@ function Login() {
       email: "",
       password: "",
     },
-  })
+  });
 
-  const onSubmit = (data) => {
-    console.log(data)
-  }
+const onSubmit = (data) => {
+  mutate(data, {
+    onSuccess: (response) => {
+      form.reset();
+
+      toast.add({
+        title: "Login Successful",
+        description: "You can start planning your tasks!",
+        type: "success",
+      });
+
+      navigate("/tasks");
+    },
+
+    onError: (error) => {
+      toast.add({
+        title: "Login Failed",
+        description: "Please check your credentials!",
+        type: "error",
+        actionProps: {
+          children: "Signup",
+          onClick: () => navigate("/signup"),
+        },
+      });
+    },
+  });
+};
+
 
   return (
     <section className="flex flex-row w-full max-w-7xl min-h-screen justify-center items-center">

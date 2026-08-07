@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 
 
 let createUser = async (user) => {
-
     let response = await fetch(`${import.meta.env.VITE_API_URL}users/create`, {
         method: "POST",
         headers: {
