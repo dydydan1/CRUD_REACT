@@ -1,28 +1,30 @@
+"use client"
+
+import * as React from "react"
+import { format } from "date-fns"
+import { ChevronDownIcon } from "lucide-react"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
-"use client"
-import * as React from "react"
-import { format } from "date-fns"
-import { ChevronDownIcon } from "lucide-react" 
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-
-import { Controller, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 
 import {
   Field,
@@ -31,6 +33,10 @@ import {
 } from "@/components/ui/field"
 
 import { CreateTaskSchema } from "@/schema/createTask.schema"
+import { useCreateTask } from "@/hooks/useCreateTasks.hook"
+
+// Your existing toast
+import { toast } from "@/components/ui/toast"
 
 const items = [
   {
@@ -48,6 +54,10 @@ const items = [
 ]
 
 export function CreateTaskForm() {
+  const {
+    mutate,
+    isPending,
+  } = useCreateTask()
 
   const form = useForm({
     resolver: zodResolver(CreateTaskSchema),
@@ -58,16 +68,36 @@ export function CreateTaskForm() {
       priority: "",
       dueDate: undefined,
       description: "",
-  },
-  });
+    },
+  })
 
   const onSubmit = (data) => {
-    console.log(data)
+    console.log("Form data:", data)
+
+    mutate(data, {
+      onSuccess: () => {
+        toast.add({
+          title: "Task created",
+          description: "Your task was created successfully.",
+          type: "success",
+        })
+
+        form.reset()
+      },
+
+      onError: (error) => {
+        toast.add({
+          title: "Failed to create task",
+          description: error.message || "Something went wrong.",
+          type: "error",
+        })
+      },
+    })
   }
 
   return (
     <div>
-      <h2 className="text-2xl mb-4">
+      <h2 className="text-xl font-semibold">
         Create a new Task
       </h2>
 
@@ -75,14 +105,14 @@ export function CreateTaskForm() {
 
         {/* TITLE */}
         <div className="py-2">
-
           <Controller
             name="title"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-
-                <FieldLabel>Task Title</FieldLabel>
+                <FieldLabel>
+                  Task Title
+                </FieldLabel>
 
                 <Input
                   {...field}
@@ -91,16 +121,16 @@ export function CreateTaskForm() {
                 />
 
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    errors={[fieldState.error]}
+                  />
                 )}
-
               </Field>
             )}
           />
-
         </div>
 
-
+        {/* STATUS + PRIORITY */}
         <div className="flex justify-between py-2">
 
           {/* STATUS */}
@@ -109,20 +139,22 @@ export function CreateTaskForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-
-                <FieldLabel>Status</FieldLabel>
+                <FieldLabel>
+                  Status
+                </FieldLabel>
 
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
                   <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Select status" />
+                    <SelectValue
+                      placeholder="Select status"
+                    />
                   </SelectTrigger>
 
                   <SelectContent>
                     <SelectGroup>
-
                       <SelectItem value="pending">
                         Pending
                       </SelectItem>
@@ -134,19 +166,18 @@ export function CreateTaskForm() {
                       <SelectItem value="completed">
                         Completed
                       </SelectItem>
-
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    errors={[fieldState.error]}
+                  />
                 )}
-
               </Field>
             )}
           />
-
 
           {/* PRIORITY */}
           <Controller
@@ -154,20 +185,22 @@ export function CreateTaskForm() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-
-                <FieldLabel>Priority</FieldLabel>
+                <FieldLabel>
+                  Priority
+                </FieldLabel>
 
                 <Select
                   value={field.value}
                   onValueChange={field.onChange}
                 >
                   <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Select priority" />
+                    <SelectValue
+                      placeholder="Select priority"
+                    />
                   </SelectTrigger>
 
                   <SelectContent>
                     <SelectGroup>
-
                       {items.map((item) => (
                         <SelectItem
                           key={item.value}
@@ -176,35 +209,33 @@ export function CreateTaskForm() {
                           {item.label}
                         </SelectItem>
                       ))}
-
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    errors={[fieldState.error]}
+                  />
                 )}
-
               </Field>
             )}
           />
 
         </div>
 
-
         {/* DUE DATE */}
         <div className="py-2">
-
           <Controller
             name="dueDate"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-
-                <FieldLabel>Due Date</FieldLabel>
+                <FieldLabel>
+                  Due Date
+                </FieldLabel>
 
                 <Popover>
-
                   <PopoverTrigger
                     render={
                       <Button
@@ -231,30 +262,28 @@ export function CreateTaskForm() {
                       onSelect={field.onChange}
                     />
                   </PopoverContent>
-
                 </Popover>
 
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    errors={[fieldState.error]}
+                  />
                 )}
-
               </Field>
             )}
           />
-
         </div>
-
 
         {/* DESCRIPTION */}
         <div className="py-2">
-
           <Controller
             name="description"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-
-                <FieldLabel>Description</FieldLabel>
+                <FieldLabel>
+                  Description
+                </FieldLabel>
 
                 <Textarea
                   {...field}
@@ -262,22 +291,25 @@ export function CreateTaskForm() {
                 />
 
                 {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
+                  <FieldError
+                    errors={[fieldState.error]}
+                  />
                 )}
-
               </Field>
             )}
           />
-
         </div>
 
-
-        <div className="py-2 flex justify-end">
-
-          <Button type="submit">
-            Create Task
+        {/* SUBMIT */}
+        <div className="flex justify-end py-2">
+          <Button
+            type="submit"
+            disabled={isPending}
+          >
+            {isPending
+              ? "Creating..."
+              : "Create Task"}
           </Button>
-
         </div>
 
       </form>

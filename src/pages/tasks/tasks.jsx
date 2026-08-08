@@ -2,7 +2,23 @@ import { FilterBar } from "@/components/filterBar/filterBar.jsx";
 import { TasksCounter } from "@/components/tasksCounter/tasksCounter";
 import {  Task } from "@/components/task/task.jsx";
 import  {TaskSidebar}  from "@/components/taskSidebar/taskSidebar.jsx";
+import { useFetchTask } from "@/hooks/useFetchTask.hook";
+import { useState } from "react";
+
 function Tasks() {
+
+  const [order, setOrder] = useState("asc")
+  const [limit, setLimit] = useState(5)
+  const [page, setPage] = useState(1)
+
+  let {data, isError, isSuccess, isPending, error} = useFetchTask({
+    order, 
+    limit, 
+    page,
+  });
+
+  console.log(data)
+
   return (
     <section className="flex flex-row w-full p-4 gap-8">
 
