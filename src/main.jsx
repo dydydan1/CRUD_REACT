@@ -9,7 +9,7 @@ import Signup from "./pages/singup/signup.jsx";
 import Login from "./pages/login/login.jsx";
 import Error404 from "./pages/404/404.jsx";
 import PrivateRoutes from "./components/privateRoutes/privateRoutes.jsx"
-
+import { TasksContextProvider } from "./context/tasks.context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
@@ -46,7 +46,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
+      <TasksContextProvider>
       <RouterProvider router={router} />
+      </TasksContextProvider>
       <Toaster />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
