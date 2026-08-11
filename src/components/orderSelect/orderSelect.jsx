@@ -6,23 +6,39 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+
+import { useSearchParams } from "react-router";
 
 const items = [
-  { label: "Select Order", value: null },
-  { label: "ASC", value: "Ascend" },
-  { label: "DESC", value: "Descend" },
-]
+  { label: "ASC", value: "asc" },
+  { label: "DESC", value: "desc" },
+];
 
 export function OrderSelect() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const order = searchParams.get("order") ?? "asc";
+  const limit = searchParams.get("limit") ?? "5";
+
+  const handleOrderChange = (newOrder) => {
+    setSearchParams({
+      page: "1",
+      limit: limit,
+      order: newOrder,
+    });
+  };
+
   return (
-    <Select items={items}>
-      <SelectTrigger className="w-full max-w-48 ">
-        <SelectValue />
+    <Select value={order} onValueChange={handleOrderChange}>
+      <SelectTrigger className="w-full max-w-48">
+        <SelectValue placeholder="Select Order" />
       </SelectTrigger>
+
       <SelectContent>
         <SelectGroup>
-          <SelectLabel >Order Selection</SelectLabel>
+          <SelectLabel>Order Selection</SelectLabel>
+
           {items.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}
@@ -31,5 +47,5 @@ export function OrderSelect() {
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }
