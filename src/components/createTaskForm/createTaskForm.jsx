@@ -5,6 +5,7 @@ import { format } from "date-fns"
 import { ChevronDownIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQueryClient } from "@tanstack/react-query"
 
 import {
   Select,
@@ -35,7 +36,7 @@ import {
 import { CreateTaskSchema } from "@/schema/createTask.schema"
 import { useCreateTask } from "@/hooks/useCreateTasks.hook"
 
-// Your existing toast
+
 import { toast } from "@/components/ui/toast"
 
 const items = [
@@ -54,10 +55,9 @@ const items = [
 ]
 
 export function CreateTaskForm() {
-  const {
-    mutate,
-    isPending,
-  } = useCreateTask()
+
+  const { mutate, isPending, } = useCreateTask()
+  let queryClient = useQueryClient();
 
   const form = useForm({
     resolver: zodResolver(CreateTaskSchema),
@@ -82,7 +82,11 @@ export function CreateTaskForm() {
           type: "success",
         })
 
-        form.reset()
+        form.reset();
+        queryClient.invalidateQueries({
+          queryKey: ["fetchTasks"],
+          refetchType: "all",
+        })
       },
 
       onError: (error) => {

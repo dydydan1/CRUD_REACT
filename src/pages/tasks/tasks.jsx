@@ -2,12 +2,13 @@ import { FilterBar } from "@/components/filterBar/filterBar.jsx";
 import { TasksCounter } from "@/components/tasksCounter/tasksCounter";
 import { Task } from "@/components/task/task.jsx";
 import { TaskSidebar } from "@/components/taskSidebar/taskSidebar.jsx";
-import { TaskPagination } from "@/components/tasksPagination/tasksPagination.jsx";
 import { useFetchTask } from "@/hooks/useFetchTask.hook";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "@/context/tasks.context";
 import { useSearchParams } from "react-router";
+import { useUpdateTask } from "@/hooks/useUpdateTasks.hook";
+import { useDeleteTask } from "@/hooks/useDeleteTask.hook";
 
 function DisplaySkeleton() {
   return (
@@ -18,37 +19,74 @@ function DisplaySkeleton() {
 }
 
 function Tasks() {
+  const { mutate: updateTask } = useUpdateTask();
+  const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
+
   const [searchParams] = useSearchParams();
 
-  // Get values from URL
   const order = searchParams.get("order") ?? "asc";
   const limit = Number(searchParams.get("limit") ?? 5);
   const page = Number(searchParams.get("page") ?? 1);
 
-  console.log("order:", order);
-  console.log("limit:", limit);
-  console.log("page:", page);
-
   const { setTasks } = useContext(TasksContext);
+
+  const [tasks, setLocalTasks] = useState([]);
 
   const {
     data,
-    isError,
-    isSuccess,
     isPending,
-    error,
   } = useFetchTask({
     order,
     limit,
     page,
   });
 
-  // Save fetched tasks to global state
+  // Get tasks from backend
   useEffect(() => {
-    if (data) {
+    if (data?.data) {
+      setLocalTasks(data.data);
       setTasks(data);
     }
   }, [data, setTasks]);
+
+  // Toggle In Progress
+  const handleInProgress = (task) => {
+    const newStatus =
+      task.status === "in-progress"
+        ? "pending"
+        : "in-progress";
+
+    // Update frontend immediately
+    setLocalTasks((currentTasks) =>
+      currentTasks.map((currentTask) =>
+        currentTask._id === task._id
+          ? {
+              ...currentTask,
+              status: newStatus,
+            }
+          : currentTask
+      )
+    );
+
+    // Update backend
+    updateTask({
+      _id: task._id,
+      status: newStatus,
+    });
+  };
+
+  // Delete completed task
+  const handleCompleted = (task) => {
+    // Remove immediately from frontend
+    setLocalTasks((currentTasks) =>
+      currentTasks.filter(
+        (currentTask) => currentTask._id !== task._id
+      )
+    );
+
+    // Delete from database
+    deleteTask(task._id);
+  };
 
   return (
     <>
@@ -80,7 +118,7 @@ function Tasks() {
 
             {/* Tasks */}
             {!isPending &&
-              data?.data?.map((task) => (
+              tasks.map((task) => (
                 <Task
                   key={task._id}
                   title={task.title}
@@ -89,12 +127,12 @@ function Tasks() {
                   description={task.description}
                   dueDate={new Date(task.dueDate)}
                   id={task._id}
+                  onInProgress={() => handleInProgress(task)}
+                  onCompleted={() => handleCompleted(task)}
+                  isDeleting={isDeleting}
                 />
               ))
             }
-
-            {/* Pagination */}
-
 
           </div>
         </div>

@@ -46,9 +46,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
+
       <TasksContextProvider>
-      <RouterProvider router={router} />
+          <RouterProvider router={router} />
       </TasksContextProvider>
+
       <Toaster />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
