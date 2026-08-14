@@ -5,7 +5,6 @@ import { format } from "date-fns"
 import { ChevronDownIcon } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useQueryClient } from "@tanstack/react-query"
 
 import {
   Select,
@@ -36,7 +35,6 @@ import {
 import { CreateTaskSchema } from "@/schema/createTask.schema"
 import { useCreateTask } from "@/hooks/useCreateTasks.hook"
 
-
 import { toast } from "@/components/ui/toast"
 
 const items = [
@@ -56,8 +54,10 @@ const items = [
 
 export function CreateTaskForm() {
 
-  const { mutate, isPending, } = useCreateTask()
-  let queryClient = useQueryClient();
+  const {
+    mutate,
+    isPending,
+  } = useCreateTask()
 
   const form = useForm({
     resolver: zodResolver(CreateTaskSchema),
@@ -78,21 +78,20 @@ export function CreateTaskForm() {
       onSuccess: () => {
         toast.add({
           title: "Task created",
-          description: "Your task was created successfully.",
+          description:
+            "Your task was created successfully.",
           type: "success",
         })
 
-        form.reset();
-        queryClient.invalidateQueries({
-          queryKey: ["fetchTasks"],
-          refetchType: "all",
-        })
+        form.reset()
       },
 
       onError: (error) => {
         toast.add({
           title: "Failed to create task",
-          description: error.message || "Something went wrong.",
+          description:
+            error.message ||
+            "Something went wrong.",
           type: "error",
         })
       },
@@ -105,15 +104,24 @@ export function CreateTaskForm() {
         Create a new Task
       </h2>
 
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
 
         {/* TITLE */}
         <div className="py-2">
           <Controller
             name="title"
             control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+            render={({
+              field,
+              fieldState,
+            }) => (
+              <Field
+                data-invalid={
+                  fieldState.invalid
+                }
+              >
                 <FieldLabel>
                   Task Title
                 </FieldLabel>
@@ -126,7 +134,9 @@ export function CreateTaskForm() {
 
                 {fieldState.invalid && (
                   <FieldError
-                    errors={[fieldState.error]}
+                    errors={[
+                      fieldState.error,
+                    ]}
                   />
                 )}
               </Field>
@@ -141,15 +151,24 @@ export function CreateTaskForm() {
           <Controller
             name="status"
             control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+            render={({
+              field,
+              fieldState,
+            }) => (
+              <Field
+                data-invalid={
+                  fieldState.invalid
+                }
+              >
                 <FieldLabel>
                   Status
                 </FieldLabel>
 
                 <Select
                   value={field.value}
-                  onValueChange={field.onChange}
+                  onValueChange={
+                    field.onChange
+                  }
                 >
                   <SelectTrigger className="w-48">
                     <SelectValue
@@ -159,8 +178,9 @@ export function CreateTaskForm() {
 
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="pending">
-                        Pending
+
+                      <SelectItem value="todo">
+                        Todo
                       </SelectItem>
 
                       <SelectItem value="in-progress">
@@ -170,13 +190,16 @@ export function CreateTaskForm() {
                       <SelectItem value="completed">
                         Completed
                       </SelectItem>
+
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
                 {fieldState.invalid && (
                   <FieldError
-                    errors={[fieldState.error]}
+                    errors={[
+                      fieldState.error,
+                    ]}
                   />
                 )}
               </Field>
@@ -187,15 +210,24 @@ export function CreateTaskForm() {
           <Controller
             name="priority"
             control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+            render={({
+              field,
+              fieldState,
+            }) => (
+              <Field
+                data-invalid={
+                  fieldState.invalid
+                }
+              >
                 <FieldLabel>
                   Priority
                 </FieldLabel>
 
                 <Select
                   value={field.value}
-                  onValueChange={field.onChange}
+                  onValueChange={
+                    field.onChange
+                  }
                 >
                   <SelectTrigger className="w-48">
                     <SelectValue
@@ -205,21 +237,29 @@ export function CreateTaskForm() {
 
                   <SelectContent>
                     <SelectGroup>
-                      {items.map((item) => (
-                        <SelectItem
-                          key={item.value}
-                          value={item.value}
-                        >
-                          {item.label}
-                        </SelectItem>
-                      ))}
+                      {items.map(
+                        (item) => (
+                          <SelectItem
+                            key={
+                              item.value
+                            }
+                            value={
+                              item.value
+                            }
+                          >
+                            {item.label}
+                          </SelectItem>
+                        )
+                      )}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
 
                 {fieldState.invalid && (
                   <FieldError
-                    errors={[fieldState.error]}
+                    errors={[
+                      fieldState.error,
+                    ]}
                   />
                 )}
               </Field>
@@ -233,8 +273,15 @@ export function CreateTaskForm() {
           <Controller
             name="dueDate"
             control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+            render={({
+              field,
+              fieldState,
+            }) => (
+              <Field
+                data-invalid={
+                  fieldState.invalid
+                }
+              >
                 <FieldLabel>
                   Due Date
                 </FieldLabel>
@@ -248,7 +295,10 @@ export function CreateTaskForm() {
                         className="w-50 justify-between"
                       >
                         {field.value
-                          ? format(field.value, "PPP")
+                          ? format(
+                              field.value,
+                              "PPP"
+                            )
                           : "Due date"}
 
                         <ChevronDownIcon />
@@ -262,15 +312,21 @@ export function CreateTaskForm() {
                   >
                     <Calendar
                       mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
+                      selected={
+                        field.value
+                      }
+                      onSelect={
+                        field.onChange
+                      }
                     />
                   </PopoverContent>
                 </Popover>
 
                 {fieldState.invalid && (
                   <FieldError
-                    errors={[fieldState.error]}
+                    errors={[
+                      fieldState.error,
+                    ]}
                   />
                 )}
               </Field>
@@ -283,8 +339,15 @@ export function CreateTaskForm() {
           <Controller
             name="description"
             control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+            render={({
+              field,
+              fieldState,
+            }) => (
+              <Field
+                data-invalid={
+                  fieldState.invalid
+                }
+              >
                 <FieldLabel>
                   Description
                 </FieldLabel>
@@ -296,7 +359,9 @@ export function CreateTaskForm() {
 
                 {fieldState.invalid && (
                   <FieldError
-                    errors={[fieldState.error]}
+                    errors={[
+                      fieldState.error,
+                    ]}
                   />
                 )}
               </Field>

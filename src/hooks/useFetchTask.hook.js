@@ -2,7 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 
 const fetchTasks = async ({ queryKey }) => {
-  const [_key, { order = "asc", limit = 5, page = 1 }] = queryKey;
+  const [
+    ,
+    {
+      order = "asc",
+      limit = 5,
+      page = 1,
+    },
+  ] = queryKey;
 
   const token = Cookies.get("token");
 
@@ -10,13 +17,12 @@ const fetchTasks = async ({ queryKey }) => {
     `${import.meta.env.VITE_API_URL}tasks`
   );
 
-  url.searchParams.append("order", order);
-  url.searchParams.append("limit", limit);
-  url.searchParams.append("page", page);
+  url.searchParams.set("order", order);
+  url.searchParams.set("limit", limit);
+  url.searchParams.set("page", page);
 
   const response = await fetch(url, {
     method: "GET",
-
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -38,5 +44,7 @@ export function useFetchTask(params = {}) {
   return useQuery({
     queryKey: ["fetchTasks", params],
     queryFn: fetchTasks,
+    placeholderData: (previousData) =>
+      previousData,
   });
 }

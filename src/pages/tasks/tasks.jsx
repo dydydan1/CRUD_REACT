@@ -8,7 +8,6 @@ import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "@/context/tasks.context";
 import { useSearchParams } from "react-router";
 import { useUpdateTask } from "@/hooks/useUpdateTasks.hook";
-import { useDeleteTask } from "@/hooks/useDeleteTask.hook";
 
 function DisplaySkeleton() {
   return (
@@ -20,7 +19,6 @@ function DisplaySkeleton() {
 
 function Tasks() {
   const { mutate: updateTask } = useUpdateTask();
-  const { mutate: deleteTask, isPending: isDeleting } = useDeleteTask();
 
   const [searchParams] = useSearchParams();
 
@@ -41,7 +39,6 @@ function Tasks() {
     page,
   });
 
-  // Get tasks from backend
   useEffect(() => {
     if (data?.data) {
       setLocalTasks(data.data);
@@ -49,14 +46,23 @@ function Tasks() {
     }
   }, [data, setTasks]);
 
-  // Toggle In Progress
+  const todoCount =
+    data?.taskCounter?.todo ?? 0;
+
+  const inProgressCount =
+    data?.taskCounter?.inProgress ?? 0;
+
+  const completedCount =
+    data?.taskCounter?.completed ?? 0;
+
+  // TODO <-> IN PROGRESS
   const handleInProgress = (task) => {
     const newStatus =
       task.status === "in-progress"
-        ? "pending"
+        ? "todo"
         : "in-progress";
 
-    // Update frontend immediately
+    // Update UI immediately
     setLocalTasks((currentTasks) =>
       currentTasks.map((currentTask) =>
         currentTask._id === task._id
@@ -68,24 +74,28 @@ function Tasks() {
       )
     );
 
-    // Update backend
+    // Update database
     updateTask({
       _id: task._id,
       status: newStatus,
     });
   };
 
-  // Delete completed task
+  // TODO / IN PROGRESS -> COMPLETED
   const handleCompleted = (task) => {
-    // Remove immediately from frontend
+    // Update database
+    updateTask({
+      _id: task._id,
+      status: "completed",
+    });
+
+    // Remove from visible task list
     setLocalTasks((currentTasks) =>
       currentTasks.filter(
-        (currentTask) => currentTask._id !== task._id
+        (currentTask) =>
+          currentTask._id !== task._id
       )
     );
-
-    // Delete from database
-    deleteTask(task._id);
   };
 
   return (
@@ -99,22 +109,37 @@ function Tasks() {
 
           <div className="w-11/12 flex flex-col">
 
+            {/* Task Counters */}
             <div className="flex justify-around mb-16">
-              <TasksCounter count={4} type="todo" />
-              <TasksCounter count={8} type="inProgress" />
-              <TasksCounter count={3} type="completed" />
+
+              <TasksCounter
+                count={todoCount}
+                type="todo"
+              />
+
+              <TasksCounter
+                count={inProgressCount}
+                type="inProgress"
+              />
+
+              <TasksCounter
+                count={completedCount}
+                type="completed"
+              />
+
             </div>
 
             <FilterBar />
 
             {/* Loading */}
             {isPending &&
-              [...Array(limit)].map((_entry, index) => (
-                <DisplaySkeleton
-                  key={`${index}skel`}
-                />
-              ))
-            }
+              [...Array(limit)].map(
+                (_, index) => (
+                  <DisplaySkeleton
+                    key={`${index}-skeleton`}
+                  />
+                )
+              )}
 
             {/* Tasks */}
             {!isPending &&
@@ -127,12 +152,14 @@ function Tasks() {
                   description={task.description}
                   dueDate={new Date(task.dueDate)}
                   id={task._id}
-                  onInProgress={() => handleInProgress(task)}
-                  onCompleted={() => handleCompleted(task)}
-                  isDeleting={isDeleting}
+                  onInProgress={() =>
+                    handleInProgress(task)
+                  }
+                  onCompleted={() =>
+                    handleCompleted(task)
+                  }
                 />
-              ))
-            }
+              ))}
 
           </div>
         </div>

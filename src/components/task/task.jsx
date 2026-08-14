@@ -10,25 +10,25 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-export function Task(props) {
-  const {
-    title = "Task Title",
-    description = "Task Description",
-    dueDate = "2026-08-03T00:00:00.000Z",
-    status = "todo",
-    priority = "normal",
-    id,
-    onInProgress,
-    onCompleted,
-    isDeleting,
-  } = props;
-
+export function Task({
+  title = "Task Title",
+  description = "Task Description",
+  dueDate,
+  status = "todo",
+  priority = "medium",
+  id,
+  onInProgress,
+  onCompleted,
+}) {
   const formatDate = dueDate
-    ? new Date(dueDate).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+    ? new Date(dueDate).toLocaleDateString(
+        "en-GB",
+        {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }
+      )
     : "No due date";
 
   return (
@@ -47,44 +47,31 @@ export function Task(props) {
           </div>
 
           <div className="flex items-center gap-2">
+
             <Badge variant="outline">
               {formatDate}
             </Badge>
 
-            {priority === "normal" && (
-              <Badge
-                className="bg-sky-800 text-white"
-                variant="outline"
-              >
-                {priority}
-              </Badge>
-            )}
+            <Badge
+              variant="outline"
+              className={
+                priority === "high"
+                  ? "bg-red-800 text-white"
+                  : priority === "medium"
+                  ? "bg-orange-800 text-white"
+                  : "bg-sky-800 text-white"
+              }
+            >
+              {priority}
+            </Badge>
 
-            {priority === "medium" && (
-              <Badge
-                className="bg-orange-800 text-white"
-                variant="outline"
-              >
-                {priority}
-              </Badge>
-            )}
-
-            {priority === "high" && (
-              <Badge
-                className="bg-red-800 text-white"
-                variant="outline"
-              >
-                {priority}
-              </Badge>
-            )}
           </div>
-
         </div>
       </CardHeader>
 
       <CardFooter className="flex justify-between border-t px-6 pt-4">
 
-        {/* In Progress */}
+        {/* In Progress Toggle */}
         <div className="flex items-center space-x-2">
           <Switch
             checked={status === "in-progress"}
@@ -101,9 +88,8 @@ export function Task(props) {
         <Button
           type="button"
           onClick={onCompleted}
-          disabled={isDeleting}
         >
-          {isDeleting ? "Completing..." : "Completed"}
+          Completed
         </Button>
 
       </CardFooter>
