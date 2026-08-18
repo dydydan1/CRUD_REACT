@@ -41,10 +41,26 @@ const fetchTasks = async ({ queryKey }) => {
 };
 
 export function useFetchTask(params = {}) {
+  const user = Cookies.get("user");
+
+  let userData = null;
+
+  try {
+    userData = user ? JSON.parse(user) : null;
+  } catch (error) {
+    console.error("Invalid user cookie:", error);
+  }
+
+  const userId =
+    userData?._id ||
+    userData?.id ||
+    userData?.email ||
+    null;
+
   return useQuery({
-    queryKey: ["fetchTasks", params],
+    queryKey: ["fetchTasks", params, userId],
     queryFn: fetchTasks,
-    placeholderData: (previousData) =>
-      previousData,
+    placeholderData: (previousData) => previousData,
+    enabled: !!Cookies.get("token") && !!userId,
   });
 }
