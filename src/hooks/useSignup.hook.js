@@ -1,31 +1,38 @@
 import { useMutation } from "@tanstack/react-query";
 
+const createUser = async (user) => {
+    const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/users/create`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+        }
+    );
 
-let createUser = async (user) => {
-    let response = await fetch(`${import.meta.env.VITE_API_URL}users/create`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-    });
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
 
-    if(!response.ok){
-        throw new Error("Network response was not ok")
+        throw new Error(
+            errorData?.message || "Failed to create user"
+        );
     }
 
     return await response.json();
 };
 
-
-export function useSignup(){
+export function useSignup() {
     return useMutation({
         mutationFn: createUser,
-        onSuccess: (response)=>{
-            console.log("User created successfully", response);
+
+        onSuccess: (response) => {
+            console.log("User created successfully:", response);
         },
-        onError: (error)=>{
-            console.log("Error creating the user", error)
+
+        onError: (error) => {
+            console.error("Error creating the user:", error);
         },
-    })
+    });
 }
