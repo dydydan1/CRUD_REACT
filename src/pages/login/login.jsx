@@ -68,98 +68,106 @@ const onSubmit = (data) => {
 };
 
 
-  return (
-    <section className="flex flex-row w-full max-w-7xl min-h-screen justify-center items-center">
-      <div className="w-4/12">
+return (
+  <section className="flex min-h-screen w-full items-center justify-center bg-[#0b0b0b] px-6 text-white">
 
-        <Card>
+    <div className="w-full max-w-md">
 
-          <CardHeader>
-            <CardTitle>Login</CardTitle>
-            <CardDescription>
-              Login and create tasks
-            </CardDescription>
-          </CardHeader>
+      {/* Home Button */}
+      <Link
+        to="/"
+        className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 transition hover:text-white"
+      >
+        ← Home
+      </Link>
 
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+      <Card className="border-[#222] bg-[#111111] text-white">
 
-            <CardContent className="space-y-4">
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+          <CardDescription className="text-gray-500">
+            Login and create tasks
+          </CardDescription>
+        </CardHeader>
 
-              {/* EMAIL */}
-              <Controller
-                name="email"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
 
-                    <FieldLabel>Email</FieldLabel>
+          <CardContent className="space-y-4">
 
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder="Email"
-                    />
+            {/* EMAIL */}
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
 
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
+                  <FieldLabel>Email</FieldLabel>
 
-                  </Field>
-                )}
-              />
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="Email"
+                  />
 
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
 
-              {/* PASSWORD */}
-              <Controller
-                name="password"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
+                </Field>
+              )}
+            />
 
-                    <FieldLabel>Password</FieldLabel>
+            {/* PASSWORD */}
+            <Controller
+              name="password"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
 
-                    <Input
-                      {...field}
-                      type="password"
-                      placeholder="Password"
-                    />
+                  <FieldLabel>Password</FieldLabel>
 
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="Password"
+                  />
 
-                  </Field>
-                )}
-              />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
 
-            </CardContent>
+                </Field>
+              )}
+            />
 
+          </CardContent>
 
-            <CardFooter className="flex flex-row justify-between mt-6">
+          <CardFooter className="mt-6 flex flex-row justify-between">
 
-              <p className="basis-1/2">
-                Don't have an account?{" "}
-                <Link
-                  to="/signup"
-                  className="hover:text-blue-500"
-                >
-                  Signup here
-                </Link>
-              </p>
+            <p className="basis-1/2 text-sm">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-gray-400 transition hover:text-white"
+              >
+                Signup here
+              </Link>
+            </p>
 
-              <Button type="submit">
-                Login
-              </Button>
+            <Button type="submit">
+              Login
+            </Button>
 
-            </CardFooter>
+          </CardFooter>
 
-          </form>
+        </form>
 
-        </Card>
+      </Card>
 
-      </div>
-    </section>
-  )
+    </div>
+
+  </section>
+)
 }
 
 export default Login
