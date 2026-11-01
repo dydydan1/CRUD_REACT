@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import FaqChatbot from "./components/faqChatbot/faqChatbot";
+import { ThemeToggle } from "./components/themeToggle/themeToggle";
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#0b0b0b] text-white">
+    <div className="min-h-screen bg-background text-foreground">
 
       {/* Navigation */}
-      <nav className="border-b border-[#222]">
+      <nav className="border-b border-border">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
 
           <Link
@@ -16,20 +17,21 @@ function App() {
             Tasksy
           </Link>
 
-          <div className="flex items-center gap-7 text-sm">
+          <div className="flex items-center gap-4 text-sm">
             <Link
               to="/"
-              className="text-white"
+              className="text-foreground"
             >
               Home
             </Link>
 
             <Link
               to="/login"
-              className="text-gray-400 transition hover:text-white"
+              className="text-muted-foreground transition hover:text-foreground"
             >
               Login
             </Link>
+            <ThemeToggle />
           </div>
 
         </div>
@@ -42,19 +44,19 @@ function App() {
         {/* Hero */}
         <section className="mx-auto flex max-w-6xl flex-col px-6 py-28 md:py-36">
 
-          <p className="mb-5 text-sm text-gray-500">
+          <p className="mb-5 text-sm text-muted-foreground">
             Task Management Application
           </p>
 
           <h1 className="max-w-3xl text-5xl font-semibold leading-tight tracking-tight md:text-7xl">
             Keep your tasks
             <br />
-            <span className="text-gray-400">
+            <span className="text-muted-foreground">
               organized and simple.
             </span>
           </h1>
 
-          <p className="mt-7 max-w-xl text-base leading-7 text-gray-500 md:text-lg">
+          <p className="mt-7 max-w-xl text-base leading-7 text-muted-foreground md:text-lg">
             A simple Todo List application built to help you create,
             manage, update, and keep track of your daily tasks.
           </p>
@@ -62,7 +64,7 @@ function App() {
           <div className="mt-9">
             <Link
               to="/login"
-              className="inline-block border border-white bg-white px-6 py-3 text-sm font-medium text-black transition hover:bg-gray-200"
+              className="inline-block border border-primary bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition hover:bg-primary/80"
             >
               Get Started
             </Link>
@@ -72,12 +74,12 @@ function App() {
 
 
         {/* About */}
-        <section className="border-t border-[#222]">
+        <section className="border-t border-border">
 
           <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2">
 
             <div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 About the app
               </p>
 
@@ -86,7 +88,7 @@ function App() {
               </h2>
             </div>
 
-            <div className="text-sm leading-7 text-gray-500">
+            <div className="text-sm leading-7 text-muted-foreground">
               <p>
                 Todo List gives you a straightforward way to organize
                 the things you need to get done. Create tasks, update
@@ -105,18 +107,18 @@ function App() {
 
 
         {/* Features */}
-        <section className="border-t border-[#222]">
+        <section className="border-t border-border">
 
           <div className="mx-auto max-w-6xl px-6 py-20">
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Features
             </p>
 
-            <div className="mt-8 grid border-l border-t border-[#222] md:grid-cols-3">
+            <div className="mt-8 grid border-l border-t border-border md:grid-cols-3">
 
-              <div className="border-b border-r border-[#222] p-7">
-                <p className="text-sm text-gray-500">
+              <div className="border-b border-r border-border p-7">
+                <p className="text-sm text-muted-foreground">
                   01
                 </p>
 
@@ -124,15 +126,15 @@ function App() {
                   Create Tasks
                 </h3>
 
-                <p className="mt-3 text-sm leading-6 text-gray-500">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   Add tasks and keep your daily responsibilities
                   organized in one place.
                 </p>
               </div>
 
 
-              <div className="border-b border-r border-[#222] p-7">
-                <p className="text-sm text-gray-500">
+              <div className="border-b border-r border-border p-7">
+                <p className="text-sm text-muted-foreground">
                   02
                 </p>
 
@@ -140,15 +142,15 @@ function App() {
                   Update Tasks
                 </h3>
 
-                <p className="mt-3 text-sm leading-6 text-gray-500">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   Edit your task information whenever something
                   needs to change.
                 </p>
               </div>
 
 
-              <div className="border-b border-r border-[#222] p-7">
-                <p className="text-sm text-gray-500">
+              <div className="border-b border-r border-border p-7">
+                <p className="text-sm text-muted-foreground">
                   03
                 </p>
 
@@ -156,7 +158,7 @@ function App() {
                   Manage Your List
                 </h3>
 
-                <p className="mt-3 text-sm leading-6 text-gray-500">
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   Keep your task list clean by managing completed
                   and unnecessary tasks.
                 </p>
@@ -170,15 +172,15 @@ function App() {
 
 
         {/* Technology */}
-        <section className="border-t border-[#222]">
+        <section className="border-t border-border">
 
           <div className="mx-auto max-w-6xl px-6 py-20">
 
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Built with
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm text-gray-400">
+            <div className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
 
               <span>React.js</span>
               <span>Node.js</span>
@@ -194,7 +196,7 @@ function App() {
 
 
         {/* Bottom CTA */}
-        <section className="border-t border-[#222]">
+        <section className="border-t border-border">
 
           <div className="mx-auto max-w-6xl px-6 py-24">
 
@@ -204,7 +206,7 @@ function App() {
 
             <Link
               to="/login"
-              className="mt-7 inline-block border border-[#444] px-6 py-3 text-sm text-white transition hover:border-white"
+              className="mt-7 inline-block border border-border px-6 py-3 text-sm text-foreground transition hover:border-foreground"
             >
               Go to Login
             </Link>
@@ -217,14 +219,17 @@ function App() {
 
 
       {/* Footer */}
-      <footer className="border-t border-[#222]">
+      <footer className="border-t border-border">
   <div className="mx-auto flex max-w-6xl items-center justify-center px-6 py-8">
-    <p className="text-xs text-gray-600">
+    <p className="text-xs text-muted-foreground">
       Developed by{" "}
-      <span className="text-gray-400">
+      <span className="text-muted-foreground">
         Dy Ann Razonado
       </span>
     </p>
+    <div className="sr-only">
+      <span>Current theme can be changed with the theme toggle.</span>
+    </div>
   </div>
 </footer>
 

@@ -4,6 +4,7 @@ import { UserProfile } from "@/components/userProfile/userProfile.jsx";
 import { CreateTaskForm } from "@/components/createTaskForm/createTaskForm.jsx";
 import { Logout } from "@/components/logout/logout.jsx";
 import Cookies from "js-cookie";
+import { ThemeToggle } from "@/components/themeToggle/themeToggle";
 
 export function TaskSidebar() {
   const userCookie = Cookies.get("user");
@@ -23,9 +24,12 @@ export function TaskSidebar() {
       className={`${styles.sidebarHeight} fixed right-4 top-4`}
     >
       <Card className="flex flex-col h-full w-full p-6 justify-between">
-        <UserProfile
-          firstName={user?.firstName ?? ""}
-        />
+        <div className="space-y-4">
+          <UserProfile firstName={user?.firstName ?? ""} />
+          <div className="flex justify-center">
+            <ThemeToggle />
+          </div>
+        </div>
 
         <CreateTaskForm />
 

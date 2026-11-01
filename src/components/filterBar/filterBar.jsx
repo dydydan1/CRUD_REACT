@@ -24,7 +24,7 @@ export function FilterBar({
           value={statusFilter}
           onChange={(event) => onStatusChange(event.target.value)}
           aria-label="Filter by status"
-          className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm"
+          className="h-8 rounded-lg border border-input bg-background px-2 text-sm text-foreground"
         >
           <option value="all">All statuses</option>
           <option value="todo">Todo</option>
@@ -35,7 +35,7 @@ export function FilterBar({
           value={priorityFilter}
           onChange={(event) => onPriorityChange(event.target.value)}
           aria-label="Filter by priority"
-          className="h-8 rounded-lg border border-input bg-transparent px-2 text-sm"
+          className="h-8 rounded-lg border border-input bg-background px-2 text-sm text-foreground"
         >
           <option value="all">All priorities</option>
           <option value="low">Low priority</option>

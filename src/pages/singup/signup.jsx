@@ -24,6 +24,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { SignupSchema } from "@/schema/signup.schema";
 import { useSignup } from "@/hooks/useSignup.hook";
+import { ThemeToggle } from "@/components/themeToggle/themeToggle";
 
 
 
@@ -58,7 +59,7 @@ function Signup() {
           });
         },
 
-    onError: (error) => {
+    onError: () => {
       toast.add({
         title: "Signup Failed",
         description: "Error signup, check your credentials",
@@ -69,8 +70,11 @@ function Signup() {
 };
 
   return (
-    <section className="min-h-screen flex items-center justify-center">
+    <section className="min-h-screen flex items-center justify-center bg-background px-6 text-foreground">
       <div className="w-full max-w-md">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
         <Card>
           <CardHeader>
             <CardTitle>Signup</CardTitle>

@@ -41,36 +41,36 @@ function FaqChatbot() {
       {isOpen && (
         <section
           aria-label="Tasksy frequently asked questions"
-          className="w-[calc(100vw-2.5rem)] max-w-sm overflow-hidden border border-[#333] bg-[#111] text-white shadow-2xl shadow-black/40"
+          className="w-[calc(100vw-2.5rem)] max-w-sm overflow-hidden border border-border bg-card text-card-foreground shadow-2xl shadow-black/40"
         >
-          <div className="flex items-start justify-between border-b border-[#2a2a2a] px-5 py-4">
+          <div className="flex items-start justify-between border-b border-border px-5 py-4">
             <div>
               <p className="text-sm font-medium">Tasksy help</p>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Answers to common questions
               </p>
             </div>
-            <span className="mt-1 flex items-center gap-1.5 text-xs text-gray-500">
+            <span className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
               <span className="size-1.5 rounded-full bg-emerald-400" />
               Online
             </span>
           </div>
 
           <div className="max-h-[min(28rem,60vh)] space-y-4 overflow-y-auto p-4">
-            <div className="max-w-[90%] border border-[#292929] bg-[#191919] px-3.5 py-3 text-sm leading-6 text-gray-300">
+            <div className="max-w-[90%] border border-border bg-muted px-3.5 py-3 text-sm leading-6 text-muted-foreground">
               Hi! Choose a question below and I&apos;ll point you in the right
               direction.
             </div>
 
             {selectedFaq && (
               <div className="ml-auto max-w-[90%]">
-                <div className="bg-white">
+                <div className="bg-primary text-primary-foreground">
                   <button
                     type="button"
                     aria-expanded={isQuestionOpen}
                     aria-controls="faq-question"
                     onClick={() => setIsQuestionOpen((open) => !open)}
-                    className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-xs font-medium text-gray-600 transition hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-black"
+                    className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left text-xs font-medium opacity-80 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-current"
                   >
                     <span>
                       {isQuestionOpen ? "Hide question" : "Show question"}
@@ -85,19 +85,19 @@ function FaqChatbot() {
                   {isQuestionOpen && (
                     <p
                       id="faq-question"
-                      className="border-t border-gray-200 px-3.5 py-3 text-sm leading-6 text-black"
+                      className="border-t border-primary-foreground/20 px-3.5 py-3 text-sm leading-6"
                     >
                       {selectedFaq.question}
                     </p>
                   )}
                 </div>
-                <div className="mt-2 border border-[#292929] bg-[#191919]">
+                <div className="mt-2 border border-border bg-muted">
                   <button
                     type="button"
                     aria-expanded={isAnswerOpen}
                     aria-controls="faq-answer"
                     onClick={() => setIsAnswerOpen((open) => !open)}
-                    className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-xs font-medium text-gray-400 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-white"
+                    className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-xs font-medium text-muted-foreground transition hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-foreground"
                   >
                     <span>{isAnswerOpen ? "Hide answer" : "Show answer"}</span>
                     <ChevronDown
@@ -110,7 +110,7 @@ function FaqChatbot() {
                   {isAnswerOpen && (
                     <p
                       id="faq-answer"
-                      className="border-t border-[#292929] px-3.5 py-3 text-sm leading-6 text-gray-300"
+                      className="border-t border-border px-3.5 py-3 text-sm leading-6 text-muted-foreground"
                     >
                       {selectedFaq.answer}
                     </p>
@@ -125,10 +125,10 @@ function FaqChatbot() {
                   key={faq.question}
                   type="button"
                   onClick={() => handleQuestionClick(faq)}
-                  className="group flex w-full items-center justify-between border border-[#333] px-3.5 py-3 text-left text-sm text-gray-300 transition hover:border-gray-500 hover:text-white focus-visible:border-white focus-visible:outline-none"
+                  className="group flex w-full items-center justify-between border border-border px-3.5 py-3 text-left text-sm text-muted-foreground transition hover:border-foreground hover:text-foreground focus-visible:border-foreground focus-visible:outline-none"
                 >
                   <span>{faq.question}</span>
-                  <ChevronRight className="size-4 shrink-0 text-gray-600 transition group-hover:text-white" />
+                  <ChevronRight className="size-4 shrink-0 text-muted-foreground transition group-hover:text-foreground" />
                 </button>
               ))}
             </div>
@@ -141,7 +141,7 @@ function FaqChatbot() {
         aria-expanded={isOpen}
         aria-label={isOpen ? "Close Tasksy help" : "Open Tasksy help"}
         onClick={() => setIsOpen((open) => !open)}
-        className="flex size-14 items-center justify-center rounded-full border border-white bg-white text-black shadow-xl shadow-black/30 transition hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0b0b]"
+        className="flex size-14 items-center justify-center rounded-full border border-primary bg-primary text-primary-foreground shadow-xl shadow-black/30 transition hover:bg-primary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {isOpen ? (
           <X className="size-5" aria-hidden="true" />

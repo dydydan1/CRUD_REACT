@@ -23,6 +23,7 @@ import { Controller, useForm } from "react-hook-form"
 import {useLogin} from "@/hooks/useLogin.hook.js"
 import { Children, useEffect } from "react"
 import { LoginSchema } from "@/schema/login.schema"
+import { ThemeToggle } from "@/components/themeToggle/themeToggle";
 
 
 function Login() {
@@ -69,23 +70,23 @@ const onSubmit = (data) => {
 
 
 return (
-  <section className="flex min-h-screen w-full items-center justify-center bg-[#0b0b0b] px-6 text-white">
+  <section className="flex min-h-screen w-full items-center justify-center bg-background px-6 text-foreground">
 
     <div className="w-full max-w-md">
 
       {/* Home Button */}
       <Link
         to="/"
-        className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 transition hover:text-white"
+        className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"
       >
         ← Home
       </Link>
 
-      <Card className="border-[#222] bg-[#111111] text-white">
+      <Card className="border-border bg-card text-card-foreground">
 
         <CardHeader>
           <CardTitle>Login</CardTitle>
-          <CardDescription className="text-gray-500">
+          <CardDescription className="text-muted-foreground">
             Login and create tasks
           </CardDescription>
         </CardHeader>
@@ -148,7 +149,7 @@ return (
               Don't have an account?{" "}
               <Link
                 to="/signup"
-                className="text-gray-400 transition hover:text-white"
+                className="text-muted-foreground transition hover:text-foreground"
               >
                 Signup here
               </Link>
@@ -164,6 +165,9 @@ return (
 
       </Card>
 
+    </div>
+    <div className="fixed top-5 right-5">
+      <ThemeToggle />
     </div>
 
   </section>

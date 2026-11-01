@@ -158,7 +158,7 @@ function Tasks() {
       <section className="flex basis-2/3 justify-center">
         <div className="flex flex-col w-11/12 p-4">
 
-          <h1 className="text-white font-bold text-2xl mb-8 w-full">
+          <h1 className="text-foreground font-bold text-2xl mb-8 w-full">
             Tasks as on: {formattedDate}
           </h1>
 
