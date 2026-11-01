@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import FaqChatbot from "./components/faqChatbot/faqChatbot";
 
 function App() {
   return (
@@ -227,6 +228,7 @@ function App() {
   </div>
 </footer>
 
+      <FaqChatbot />
     </div>
   );
 }
