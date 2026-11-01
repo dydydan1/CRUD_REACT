@@ -8,7 +8,7 @@ const createTask = async (task) => {
   const token = Cookies.get("token");
 
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}tasks`,
+    `${import.meta.env.VITE_API_URL}/tasks`,
     {
       method: "POST",
       headers: {

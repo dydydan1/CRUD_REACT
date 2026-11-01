@@ -14,7 +14,7 @@ const fetchTasks = async ({ queryKey }) => {
   const token = Cookies.get("token");
 
   const url = new URL(
-    `${import.meta.env.VITE_API_URL}tasks`
+    `${import.meta.env.VITE_API_URL}/tasks`
   );
 
   url.searchParams.set("order", order);
