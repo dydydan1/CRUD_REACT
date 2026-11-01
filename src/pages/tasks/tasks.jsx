@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "@/context/tasks.context";
 import { useSearchParams } from "react-router";
 import { useUpdateTask } from "@/hooks/useUpdateTasks.hook";
+import { useDeleteTask } from "@/hooks/useDeleteTask.hook";
+import { toast } from "@/components/ui/toast";
 
 function DisplaySkeleton() {
   return (
@@ -19,6 +21,7 @@ function DisplaySkeleton() {
 
 function Tasks() {
   const { mutate: updateTask } = useUpdateTask();
+  const { mutate: deleteTask } = useDeleteTask();
 
   const [searchParams] = useSearchParams();
 
@@ -29,6 +32,9 @@ function Tasks() {
   const { setTasks } = useContext(TasksContext);
 
   const [tasks, setLocalTasks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
 
   const {
     data,
@@ -54,6 +60,27 @@ function Tasks() {
 
   const completedCount =
     data?.taskCounter?.completed ?? 0;
+
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date());
+
+  const visibleTasks = tasks.filter((task) => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    const matchesSearch =
+      !normalizedSearch ||
+      String(task.title ?? "").toLowerCase().includes(normalizedSearch) ||
+      String(task.description ?? "").toLowerCase().includes(normalizedSearch);
+    const matchesStatus =
+      statusFilter === "all" || task.status === statusFilter;
+    const matchesPriority =
+      priorityFilter === "all" || task.priority === priorityFilter;
+
+    return matchesSearch && matchesStatus && matchesPriority;
+  });
 
   // TODO <-> IN PROGRESS
   const handleInProgress = (task) => {
@@ -98,13 +125,41 @@ function Tasks() {
     );
   };
 
+  const handleDelete = (task) => {
+    if (!window.confirm(`Delete "${task.title}"? This cannot be undone.`)) {
+      return;
+    }
+
+    setLocalTasks((currentTasks) =>
+      currentTasks.filter((currentTask) => currentTask._id !== task._id)
+    );
+
+    deleteTask(task._id, {
+      onSuccess: () => {
+        toast.add({
+          title: "Task deleted",
+          description: "The task was deleted successfully.",
+          type: "success",
+        });
+      },
+      onError: (error) => {
+        toast.add({
+          title: "Failed to delete task",
+          description: error.message || "Something went wrong.",
+          type: "error",
+        });
+        setLocalTasks((currentTasks) => [...currentTasks, task]);
+      },
+    });
+  };
+
   return (
     <>
       <section className="flex basis-2/3 justify-center">
         <div className="flex flex-col w-11/12 p-4">
 
           <h1 className="text-white font-bold text-2xl mb-8 w-full">
-            Tasks as on: Sunday, 2 Aug 2026
+            Tasks as on: {formattedDate}
           </h1>
 
           <div className="w-11/12 flex flex-col">
@@ -129,7 +184,14 @@ function Tasks() {
 
             </div>
 
-            <FilterBar />
+            <FilterBar
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              statusFilter={statusFilter}
+              onStatusChange={setStatusFilter}
+              priorityFilter={priorityFilter}
+              onPriorityChange={setPriorityFilter}
+            />
 
             {/* Loading */}
             {isPending &&
@@ -143,7 +205,7 @@ function Tasks() {
 
             {/* Tasks */}
             {!isPending &&
-              tasks.map((task) => (
+              visibleTasks.map((task) => (
                 <Task
                   key={task._id}
                   title={task.title}
@@ -158,8 +220,17 @@ function Tasks() {
                   onCompleted={() =>
                     handleCompleted(task)
                   }
+                  onDelete={() => handleDelete(task)}
                 />
               ))}
+
+            {!isPending && visibleTasks.length === 0 && (
+              <p className="rounded-lg border border-dashed p-8 text-center text-muted-foreground">
+                {tasks.length === 0
+                  ? "No tasks yet. Create your first task from the sidebar."
+                  : "No tasks match your current filters."}
+              </p>
+            )}
 
           </div>
         </div>

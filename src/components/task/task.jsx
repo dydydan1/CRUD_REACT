@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { EditTaskForm } from "@/components/editTaskForm/editTaskForm.jsx";
+import { useState } from "react";
 
 export function Task({
   title = "Task Title",
@@ -19,7 +21,9 @@ export function Task({
   id,
   onInProgress,
   onCompleted,
+  onDelete,
 }) {
+  const [isEditing, setIsEditing] = useState(false);
   const formatDate = dueDate
     ? new Date(dueDate).toLocaleDateString(
         "en-GB",
@@ -84,15 +88,34 @@ export function Task({
           </Label>
         </div>
 
-        {/* Completed */}
-        <Button
-          type="button"
-          onClick={onCompleted}
-        >
-          Completed
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setIsEditing((editing) => !editing)}
+          >
+            {isEditing ? "Close" : "Edit"}
+          </Button>
+          <Button type="button" onClick={onCompleted}>
+            Completed
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={onDelete}
+          >
+            Delete
+          </Button>
+        </div>
 
       </CardFooter>
+
+      {isEditing && (
+        <EditTaskForm
+          task={{ _id: id, title, description, dueDate, status, priority }}
+          onCancel={() => setIsEditing(false)}
+        />
+      )}
     </Card>
   );
 }
